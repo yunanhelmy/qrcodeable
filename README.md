@@ -30,10 +30,16 @@ to your model. You will need to add column `key` in your model using migration.
 
 Options :
 
-- `identifier`. A QRCode value used to generate QRCOde. Default value is `:key`
-- `print_path`. Default direcory for this gem. Default value is `"qrcodes/download"`
+- `identifier`. A QRCode value used to generate QRCOde. Default value is `:key`.
+- `print_path`. Default direcory for this gem. Default value is `"qrcodes/download"`.
 - `expire_mode`. Set to `true` if you want QRCode have expired_date. Default value is `false`. 
-- `expire_column`. You will need to add column `:expired_date` using migration if you set `expire_mode` to `true`. Default value is `:expired_date`
+- `expire_column`. You will need to add column `:expired_date` using migration if you set `expire_mode` to `true`. Default value is `:expired_date`.
+
+Available methods :
+
+- `print_qrcode` print qrcode, return `print_path`. You can add to callback or event send_file from controller.
+- `qrcode_path` show qrcode_path, return `print_path`.
+- `qrcode_expired?` check whether it is expired or not, return boolean.
 
 ## Examples
 
@@ -89,7 +95,21 @@ qrcodeable expired_mode: true, expire_column: :due_date
 - can expiring
 - expire_colum `:due_date`
 
+### Example 6
+```ruby
+class Product < ApplicationRecord
+  qrcodeable expired_mode: true
+end
 
+@product = Product.new(name: "Yellow Jacket", key: "1234567890", expired_date: (Time.now+5.days))
+
+@product.print_qrcode
+
+@product.qrcode_path
+
+@product.qrcode_expired?
+
+```
 
 ## TODO:
 
